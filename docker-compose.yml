@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  database:
+    container_name: postgres_sql
+    image: postgres:latest
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB:       "inquiry-service"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  inquiry-service:
+    container_name: inquiry_service
+    image: iprody-devs-gr0000000008-inquiry-service:latest
+    networks:
+      - backend
+    restart: always
+    ports:
+      - "8787:8787"
+    environment:
+      - SERVER_PORT=8787
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database/inquiry-service
+  pgadmin:
+    container_name: pg_admin4
+    image: dpage/pgadmin4:7
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "8888:80"
+    networks:
+      - backend
+    restart: always
+volumes:
+  db:
+  pgadmin:
+networks:
+  backend:
+    driver: bridge
+    
