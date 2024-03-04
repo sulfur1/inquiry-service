@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    generate-unique-name: false
+    name: inquiry-db
+    username: user
+    password: 12341234
