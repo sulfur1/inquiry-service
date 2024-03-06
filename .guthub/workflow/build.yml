@@ -1,4 +1,4 @@
-name: Java-build-CI-with-Maven
+name: Java-build
 on:
   push:
 
