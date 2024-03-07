@@ -8,11 +8,11 @@
 		<version>3.2.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.iprodi08</groupId>
+	<groupId>com.iprody08</groupId>
 	<artifactId>inquiry-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>inquiry-service</name>
-	<description>Project for Spring Boot</description>
+	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
@@ -29,6 +29,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -40,19 +41,14 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!--database-->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -70,16 +66,22 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.3.1</version>
+				<version>3.1.2</version>
 				<configuration>
-					<configLocation>${basedir}/checkstyle/checkstyle.xml</configLocation>
-					<propertiesLocation>${basedir}/checkstyle/checkstyle_maven.properties</propertiesLocation>
+					<configLocation>checkstyle/checkstyle.xml</configLocation>
+					<encoding>UTF-8</encoding>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>true</failsOnError>
+					<linkXRef>false</linkXRef>
 				</configuration>
 				<executions>
 					<execution>
+						<id>checkstyle</id>
+						<phase>verify</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>
@@ -88,4 +90,22 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.1.2</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>checkstyle</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
+
 </project>
