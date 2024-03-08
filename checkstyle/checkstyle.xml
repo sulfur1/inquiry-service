@@ -106,6 +106,7 @@
         <module name="ClassTypeParameterName"/>
         <module name="InterfaceTypeParameterName"/>
         <module name="MethodTypeParameterName"/>
+        <module name="RecordTypeParameterName"/>
         <module name="LambdaParameterName"/>
         <module name="PatternVariableName"/>
         <!-- Fix it-->
