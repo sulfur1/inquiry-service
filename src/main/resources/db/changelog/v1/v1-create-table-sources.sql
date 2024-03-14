@@ -1,14 +1,9 @@
---liquibase formatted sql
-
---changeset pbogdanovich:create-sources-V1-3
-
 create table sources (
                          id          bigserial primary key,
                          name        varchar(100) not null,
                          created_at  timestamp with time zone not null,
                          updated_at  timestamp with time zone not null
 );
---changeset pbogdanovich:add-data-V1-4
 
 INSERT INTO sources (name, created_at, updated_at)
 VALUES

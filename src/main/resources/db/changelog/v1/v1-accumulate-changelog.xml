@@ -4,12 +4,19 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet  author="liquibase-docs"  id="tagDatabase-example" >
+    <changeSet  author="pbogdanovich"  id="create-inquiries-V1-1" >
         <sqlFile path="db/changelog/v1/v1-create-table-inquiries.sql"/>
-        <sqlFile path="db/changelog/v1/v1-create-table-sources.sql"/>
         <rollback>
-            <sqlFile path="db/changelog/v1/v1-create-table-inquiries.sql"/>
+            <sqlFile path="db/changelog/v1/rollback-tables.sql"/>
         </rollback>
     </changeSet>
+
+    <changeSet  author="pbogdanovich"  id="create-sources-V1-2" >
+        <sqlFile path="db/changelog/v1/v1-create-table-sources.sql"/>
+        <rollback>
+            <sqlFile path="db/changelog/v1/rollback-tables.sql"/>
+        </rollback>
+    </changeSet>
+
 
 </databaseChangeLog>

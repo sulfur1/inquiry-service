@@ -16,23 +16,31 @@ public class InquiryServiceImplementation implements InquiryService {
     private InquiryRepository inquiryDAO;
 
 
+/*    @Override
+    public List<InquiryDto> findAll() {
+        List<Inquiry> inquiries = inquiryDAO.findAll();
+        return inquiries.stream()
+                .map(InquiryMapper.INSTANCE::inquiryToInquiryDto)
+                .collect(Collectors.toList());
+    }*/
+
     @Override
-    public List<Inquiry> getAll() {
+    public List<Inquiry> findAll() {
         return inquiryDAO.findAll();
     }
 
     @Override
-    public void set(Inquiry entity) {
+    public void save(Inquiry entity) {
         inquiryDAO.save(entity);
     }
 
     @Override
-    public Optional<Inquiry> get(long id) {
+    public Optional<Inquiry> findById(long id) {
         return inquiryDAO.findById(id);
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteById(long id) {
         inquiryDAO.deleteById(id);
     }
 }
