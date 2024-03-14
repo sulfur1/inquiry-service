@@ -1,7 +1,3 @@
---liquibase formatted sql
-
---changeset pbogdanovich:create-inquiries-V1-1
-
 create table inquiries (
                          id              bigserial primary key,
                          productRefId    bigint not null,
@@ -15,7 +11,6 @@ create table inquiries (
                          updated_at      timestamp with time zone not null
 );
 
---changeset pbogdanovich:add-data-V1-2
 
 INSERT INTO inquiries (productRefId, customerRefId, managerRefId, source_id, comment, status, note, created_at, updated_at)
 VALUES
@@ -25,5 +20,3 @@ VALUES
     (4, 104, 204, 4, 'Comment 4', 'PAID', 'Note 4', current_timestamp, current_timestamp),
     (5, 105, 205, 5, 'Comment 5', 'REJECTED', 'Note 5', current_timestamp, current_timestamp),
     (6, 106, 206, 6, 'Comment 6', 'NEW', 'Note 6', current_timestamp, current_timestamp);
-
-

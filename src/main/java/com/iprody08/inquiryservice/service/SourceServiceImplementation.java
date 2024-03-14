@@ -16,22 +16,22 @@ public class SourceServiceImplementation implements SourceService {
     private SourceRepository sourceRepository;
 
     @Override
-    public List<Source> getAll() {
+    public List<Source> findAll() {
         return sourceRepository.findAll();
     }
 
     @Override
-    public void set(Source entity) {
+    public void save(Source entity) {
         sourceRepository.save(entity);
     }
 
     @Override
-    public Optional<Source> get(long id) {
+    public Optional<Source> findById(long id) {
         return sourceRepository.findById(id);
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteById(long id) {
         sourceRepository.deleteById(id);
     }
 }
