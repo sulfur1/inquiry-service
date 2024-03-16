@@ -12,12 +12,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class SourceServiceImplementation implements SourceService {
-    @Autowired
-    private SourceRepository sourceRepository;
+public class SourceServiceImpl implements SourceService {
+    private final SourceRepository sourceRepository;
+    private final SourceMapper sourceMapper;
 
     @Autowired
-    private SourceMapper sourceMapper;
+    public SourceServiceImpl(final SourceRepository sourceRepository, final SourceMapper sourceMapper) {
+        this.sourceRepository = sourceRepository;
+        this.sourceMapper = sourceMapper;
+    }
 
     @Override
     public List<SourceDto> findAll() {

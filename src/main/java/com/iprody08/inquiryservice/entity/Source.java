@@ -20,15 +20,12 @@ public class Source {
     private Long id;
 
     @Column(nullable = false, length = 100)
-
     private String name;
 
     @Column(nullable = false)
-
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
-
     private LocalDateTime updatedAt;
 
     @JsonIgnore

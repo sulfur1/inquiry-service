@@ -5,20 +5,20 @@ import com.iprody08.inquiryservice.dto.InquiryDto;
 import com.iprody08.inquiryservice.dto.mapper.InquiryMapper;
 import com.iprody08.inquiryservice.entity.Inquiry;
 import com.iprody08.inquiryservice.exception_handlers.NoSuchDtoException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class InquiryServiceImplementation implements InquiryService {
-    @Autowired
-    private InquiryRepository inquiryRepository;
+public class InquiryServiceImpl implements InquiryService {
+    private final InquiryRepository inquiryRepository;
+    private final InquiryMapper inquiryMapper;
 
-    @Autowired
-    private InquiryMapper inquiryMapper;
-
+    public InquiryServiceImpl(final InquiryRepository inquiryRepository, final InquiryMapper inquiryMapper) {
+        this.inquiryRepository = inquiryRepository;
+        this.inquiryMapper = inquiryMapper;
+    }
     @Override
     public List<InquiryDto> findAll() {
         return inquiryRepository.findAll()

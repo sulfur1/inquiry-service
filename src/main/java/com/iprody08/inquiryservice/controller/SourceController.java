@@ -1,11 +1,7 @@
 package com.iprody08.inquiryservice.controller;
 
-import com.iprody08.inquiryservice.entity.Inquiry;
-import com.iprody08.inquiryservice.entity.Source;
-import com.iprody08.inquiryservice.exception_handlers.NoSuchEntityException;
-import com.iprody08.inquiryservice.service.InquiryService;
+import com.iprody08.inquiryservice.dto.SourceDto;
 import com.iprody08.inquiryservice.service.SourceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,31 +13,25 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
-public final class  MainController {
+public final class SourceController {
+    private final SourceService sourceService;
 
-
-    @Autowired
-    private SourceService sourceService;
-
-
+    public SourceController(final SourceService sourceService) {
+        this.sourceService = sourceService;
+    }
 
     @GetMapping("/sources")
-    public List<Source> findAllISources() {
+    public List<SourceDto> findAll() {
         return sourceService.findAll();
     }
 
-
-
     @GetMapping("/sources/id/{id}")
-    public Source findByIdSource(@PathVariable long id) {
-        return sourceService.findById(id)
-                .orElseThrow(() -> new NoSuchEntityException("There is no sources with id " + id));
+    public SourceDto findById(@PathVariable long id) {
+        return sourceService.findById(id);
     }
 
-
-
     @DeleteMapping("/source/{id}")
-    public void deleteByIdSource(@PathVariable long id) {
+    public void deleteById(@PathVariable long id) {
         sourceService.deleteById(id);
     }
 

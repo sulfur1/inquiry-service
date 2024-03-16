@@ -1,17 +1,14 @@
-package com.iprody08.inquiryservice.dto;
+package com.iprody08.inquiryservice.dto.mapper;
 
+import com.iprody08.inquiryservice.dto.InquiryDto;
 import com.iprody08.inquiryservice.entity.Inquiry;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface InquiryMapper {
-
-    InquiryMapper INSTANCE = Mappers.getMapper(InquiryMapper.class);
-
-    @Mapping(source = "id", target = "id")
+    @Mapping(target = "sourceDto", source = "source")
     InquiryDto inquiryToInquiryDto(Inquiry inquiry);
-
+    @Mapping(target = "source", source = "sourceDto")
+    Inquiry inquiryDtoToInquiry(InquiryDto inquiryDto);
 }

@@ -1,2 +1,12 @@
-package com.iprody08.inquiryservice.dto;public class VersionDto {
+package com.iprody08.inquiryservice.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import java.time.LocalDateTime;
+
+@Getter
+@AllArgsConstructor
+public class VersionDto {
+    private String version;
+    private LocalDateTime timestamp;
 }
