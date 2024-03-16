@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<IncorrectData> handleException(NoSuchEntityException exception) {
-        final IncorrectData data = new IncorrectData();
+    public ResponseEntity<ErrorDto> handleException(NoSuchDtoException exception) {
+        final ErrorDto data = new ErrorDto();
         data.setInfo(exception.getMessage());
         return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
-    public ResponseEntity<IncorrectData> handleException(Exception exception) {
-        final IncorrectData data = new IncorrectData();
+    public ResponseEntity<ErrorDto> handleException(Exception exception) {
+        final ErrorDto data = new ErrorDto();
         data.setInfo(exception.getMessage());
         return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
     }

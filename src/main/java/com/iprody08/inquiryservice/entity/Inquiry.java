@@ -1,7 +1,5 @@
 package com.iprody08.inquiryservice.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -22,7 +20,6 @@ public class Inquiry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "source_id", nullable = false)
     private Source source;

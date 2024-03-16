@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class IncorrectData {
+public class ErrorDto {
     private String info;
 }

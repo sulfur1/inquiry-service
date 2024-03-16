@@ -1,6 +1,6 @@
 package com.iprody08.inquiryservice.service;
 
-import com.iprody08.inquiryservice.entity.Source;
+import com.iprody08.inquiryservice.dto.SourceDto;
 
-public interface SourceService extends BaseService<Source> {
+public interface SourceService extends BaseService<SourceDto> {
 }
