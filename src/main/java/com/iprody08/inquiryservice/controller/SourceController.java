@@ -16,29 +16,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/version/1")
+@RequestMapping("/api/v1")
 public final class  MainController {
-    @Autowired
-    private InquiryService inquiryService;
+
 
     @Autowired
     private SourceService sourceService;
 
-    @GetMapping("/inquiries")
-    public List<Inquiry> findAllInquiries() {
-        return inquiryService.findAll();
-    }
+
 
     @GetMapping("/sources")
     public List<Source> findAllISources() {
         return sourceService.findAll();
     }
 
-    @GetMapping("/inquiries/id/{id}")
-    public Inquiry findByIdInquiry(@PathVariable long id) {
-        return inquiryService.findById(id)
-                .orElseThrow(() -> new NoSuchEntityException("There is no inquiry with id " + id));
-    }
+
 
     @GetMapping("/sources/id/{id}")
     public Source findByIdSource(@PathVariable long id) {
@@ -46,10 +38,7 @@ public final class  MainController {
                 .orElseThrow(() -> new NoSuchEntityException("There is no sources with id " + id));
     }
 
-    @DeleteMapping("/inquiry/{id}")
-    public void deleteByIdInquiry(@PathVariable long id) {
-        inquiryService.deleteById(id);
-    }
+
 
     @DeleteMapping("/source/{id}")
     public void deleteByIdSource(@PathVariable long id) {
