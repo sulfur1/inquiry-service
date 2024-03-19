@@ -23,6 +23,7 @@
 
     <modules>
         <module>inquiry-service-app</module>
+        <module>e2e</module>
     </modules>
 
     <build>
