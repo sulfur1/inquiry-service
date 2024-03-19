@@ -26,7 +26,8 @@ public class SourceServiceImpl implements SourceService {
     public List<SourceDto> findAll() {
         return sourceRepository.findAll()
                 .stream()
-                .map(sourceMapper::sourceToSourceDto).collect(Collectors.toList());
+                .map(sourceMapper::sourceToSourceDto)
+                .collect(Collectors.toList());
     }
 
     @Override
