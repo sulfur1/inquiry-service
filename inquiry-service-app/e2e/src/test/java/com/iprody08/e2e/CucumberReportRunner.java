@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CucumberReportRunner extends BlockJUnit4ClassRunner {
-    private static final String PROJECT_NAME = "Customer Service";
+    private static final String PROJECT_NAME = "Inquiry Service";
     private static final String BUILD_NUMBER = "0.0.1";
     private static final String BRANCH_NAME = "main";
 
