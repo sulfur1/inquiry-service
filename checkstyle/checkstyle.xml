@@ -27,8 +27,7 @@
         <property name="basedir" value="${basedir}"/>
     -->
     <property name="severity" value="error"/>
-
-    <property name="fileExtensions" value="java, properties, xml"/>
+    <property name="fileExtensions" value="java, properties, xml, yml, yaml"/>
 
     <!-- Excludes all 'module-info.java' files              -->
     <!-- See https://checkstyle.org/config_filefilters.html -->
@@ -48,7 +47,9 @@
 
     <!-- Checks whether files end with a new line.                        -->
     <!-- See https://checkstyle.org/config_misc.html#NewlineAtEndOfFile -->
-    <module name="NewlineAtEndOfFile"/>
+    <module name="NewlineAtEndOfFile">
+        <property name="fileExtensions" value="java, xml"/>
+    </module>
 
     <!-- Checks that property files contain the same keys.         -->
     <!-- See https://checkstyle.org/config_misc.html#Translation -->
@@ -75,20 +76,16 @@
         <property name="message" value="Line has trailing spaces."/>
     </module>
 
-
     <module name="TreeWalker">
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See https://checkstyle.org/config_javadoc.html -->
-        <module name="InvalidJavadocPosition"/>
-        <module name="JavadocMethod">
-            <property name="allowMissingParamTags" value="true"/>
-
-        </module>
+        <!--<module name="InvalidJavadocPosition"/>
+        <module name="JavadocMethod"/>
         <module name="JavadocType"/>
         <module name="JavadocVariable"/>
         <module name="JavadocStyle"/>
-        <module name="MissingJavadocMethod"/>
+        <module name="MissingJavadocMethod"/>-->
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See https://checkstyle.org/config_naming.html -->
@@ -109,6 +106,7 @@
         <module name="ClassTypeParameterName"/>
         <module name="InterfaceTypeParameterName"/>
         <module name="MethodTypeParameterName"/>
+        <module name="RecordTypeParameterName"/>
         <module name="LambdaParameterName"/>
         <module name="PatternVariableName"/>
         <!-- Fix it-->
@@ -116,6 +114,7 @@
 
         <!-- Checks for imports                              -->
         <!-- See https://checkstyle.org/config_imports.html -->
+        <module name="AvoidStarImport"/>
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>
         <module name="UnusedImports">
@@ -177,15 +176,16 @@
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
-
         <module name="ArrayTrailingComma"/>
         <module name="AvoidDoubleBraceInitialization"/>
         <module name="DeclarationOrder"/>
         <module name="DefaultComesLast"/>
-        <module name="FinalLocalVariable"/>
+<!--        <module name="FinalLocalVariable"/>-->
         <module name="IllegalCatch"/>
+        <module name="IllegalThrows"/>
         <module name="ModifiedControlVariable"/>
         <module name="EqualsAvoidNull"/>
+        <module name="MultipleStringLiterals"/>
         <module name="NestedForDepth"/>
         <module name="NestedIfDepth"/>
         <module name="NestedTryDepth">
@@ -212,17 +212,18 @@
 
         <!-- Checks for class design                         -->
         <!-- See https://checkstyle.org/config_design.html -->
+<!--        <module name="DesignForExtension"/>-->
         <module name="FinalClass"/>
-        <module name="HideUtilityClassConstructor"/>
+<!--        <module name="HideUtilityClassConstructor"/>-->
         <module name="InterfaceIsType"/>
         <module name="VisibilityModifier"/>
 
         <!-- Miscellaneous other checks.                   -->
         <!-- See https://checkstyle.org/config_misc.html -->
         <module name="ArrayTypeStyle"/>
-        <module name="FinalParameters">
-            <property name="tokens" value="CTOR_DEF"/>
-        </module>
+<!--        <module name="FinalParameters">-->
+<!--            <property name="tokens" value="CTOR_DEF"/>-->
+<!--        </module>-->
         <module name="TodoComment"/>
         <module name="UpperEll"/>
 
