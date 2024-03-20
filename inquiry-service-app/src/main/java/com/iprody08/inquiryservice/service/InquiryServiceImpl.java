@@ -4,6 +4,7 @@ import com.iprody08.inquiryservice.dao.InquiryRepository;
 import com.iprody08.inquiryservice.dto.InquiryDto;
 import com.iprody08.inquiryservice.dto.mapper.InquiryMapper;
 import com.iprody08.inquiryservice.entity.Inquiry;
+import com.iprody08.inquiryservice.entity.Source;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class InquiryServiceImpl implements InquiryService {
     }
     @Override
     public List<InquiryDto> findAll() {
-        return inquiryRepository.findAll()
+        return inquiryRepository.findAllWithInquiry()
                 .stream()
                 .map(inquiryMapper::inquiryToInquiryDto)
                 .collect(Collectors.toList());
