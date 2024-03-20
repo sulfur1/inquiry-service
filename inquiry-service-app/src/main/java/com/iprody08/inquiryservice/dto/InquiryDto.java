@@ -17,7 +17,6 @@ public class InquiryDto {
 
     private Long id;
 
-    @JsonIgnore
     private SourceDto sourceDto;
 
     private String comment;
