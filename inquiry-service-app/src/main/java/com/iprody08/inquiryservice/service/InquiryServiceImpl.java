@@ -21,7 +21,7 @@ public class InquiryServiceImpl implements InquiryService {
     }
     @Override
     public List<InquiryDto> findAll() {
-        return inquiryRepository.findAll()
+        return inquiryRepository.findAllWithInquiry()
                 .stream()
                 .map(inquiryMapper::inquiryToInquiryDto)
                 .collect(Collectors.toList());
@@ -45,15 +45,11 @@ public class InquiryServiceImpl implements InquiryService {
 
     @Override
     public Optional<InquiryDto> update(long id, InquiryDto inquiryDto) {
-        final Optional<Inquiry> optionalInquiry = inquiryRepository.findById(id);
-        if (optionalInquiry.isPresent()) {
-            final Inquiry inquiry = optionalInquiry.get();
-            inquiryMapper.updateInquiryFromDto(inquiryDto, inquiry);
-            inquiryRepository.save(inquiry);
-            return Optional.of(inquiryMapper.inquiryToInquiryDto(inquiry));
-        } else {
-            return Optional.empty();
-        }
+        return inquiryRepository.findById(id)
+                .map(inquiry -> {
+                    inquiryMapper.updateInquiryFromDto(inquiryDto, inquiry);
+                    inquiryRepository.save(inquiry);
+                    return inquiryMapper.inquiryToInquiryDto(inquiry);
+                });
     }
-
 }

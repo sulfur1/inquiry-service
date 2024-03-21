@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@EntityListeners(SourceEntityListener.class)
 @Table(name = "sources")
 @Getter
 @Setter
@@ -24,9 +25,11 @@ public class Source {
     private String name;
 
     @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @JsonIgnore

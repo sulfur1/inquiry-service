@@ -24,7 +24,7 @@ public class SourceServiceImpl implements SourceService {
 
     @Override
     public List<SourceDto> findAll() {
-        return sourceRepository.findAll()
+        return sourceRepository.findAllWithSources()
                 .stream()
                 .map(sourceMapper::sourceToSourceDto)
                 .collect(Collectors.toList());
@@ -48,16 +48,13 @@ public class SourceServiceImpl implements SourceService {
     }
 
     @Override
-    public Optional<SourceDto> update(long id, SourceDto entity) {
-        final Optional<Source> optionalSource = sourceRepository.findById(id);
-        if (optionalSource.isPresent()) {
-            final Source source = optionalSource.get();
-            sourceMapper.updateSourceFromDto(entity, source);
-            sourceRepository.save(source);
-            return Optional.of(sourceMapper.sourceToSourceDto(source));
-        } else {
-            return Optional.empty();
-        }
+    public Optional<SourceDto> update(long id, SourceDto sourceDto) {
+        return sourceRepository.findById(id)
+                .map(source -> {
+                    sourceMapper.updateSourceFromDto(sourceDto, source);
+                    sourceRepository.save(source);
+                    return sourceMapper.sourceToSourceDto(source);
+                });
     }
 
 }

@@ -2,19 +2,19 @@ package com.iprody08.inquiryservice.entity;
 
 import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 
 @Entity
-@EntityListeners(InquiryEntityListener.class)
 @Table(name = "inquiries")
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Inquiry {
 
     @Id
@@ -36,9 +36,12 @@ public class Inquiry {
     private String note;
 
     @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
+
 
 }
