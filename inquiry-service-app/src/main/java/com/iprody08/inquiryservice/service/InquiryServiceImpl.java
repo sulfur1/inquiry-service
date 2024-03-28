@@ -4,7 +4,8 @@ import com.iprody08.inquiryservice.dao.InquiryRepository;
 import com.iprody08.inquiryservice.dto.InquiryDto;
 import com.iprody08.inquiryservice.dto.mapper.InquiryMapper;
 import com.iprody08.inquiryservice.entity.Inquiry;
-import com.iprody08.inquiryservice.entity.Source;
+import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class InquiryServiceImpl implements InquiryService {
     }
     @Override
     public List<InquiryDto> findAll() {
-        return inquiryRepository.findAllWithInquiry()
+        return inquiryRepository.findAllWithSource()
                 .stream()
                 .map(inquiryMapper::inquiryToInquiryDto)
                 .collect(Collectors.toList());
@@ -31,12 +32,14 @@ public class InquiryServiceImpl implements InquiryService {
     @Override
     public void save(InquiryDto inquiryDto) {
         final Inquiry inquiry = inquiryMapper.inquiryDtoToInquiry(inquiryDto);
+        inquiry.setStatus(InquiryStatus.NEW);
         inquiryRepository.save(inquiry);
     }
+
     @Override
     public Optional<InquiryDto> findById(long id) {
-        return  inquiryRepository
-                .findById(id).map(inquiryMapper::inquiryToInquiryDto);
+        return inquiryRepository.findByIdWithSource(id).map(inquiryMapper::inquiryToInquiryDto);
+
     }
 
     @Override
@@ -45,16 +48,37 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
-    public Optional<InquiryDto> update(long id, InquiryDto inquiryDto) {
-        final Optional<Inquiry> optionalInquiry = inquiryRepository.findById(id);
-        if (optionalInquiry.isPresent()) {
-            final Inquiry inquiry = optionalInquiry.get();
-            inquiryMapper.updateInquiryFromDto(inquiryDto, inquiry);
-            inquiryRepository.save(inquiry);
-            return Optional.of(inquiryMapper.inquiryToInquiryDto(inquiry));
+    public void deleteAll() {
+        inquiryRepository.deleteAll();
+    }
+
+    @Override
+    public Optional<InquiryDto> update(InquiryDto inquiryDto) {
+        return inquiryRepository.findById(inquiryDto.getId())
+                .map(inquiry -> {
+                    inquiryMapper.updateInquiryFromDto(inquiryDto, inquiry);
+                    inquiry.setStatus(inquiryDto.getStatus());
+                    inquiryRepository.save(inquiry);
+                    return inquiryMapper.inquiryToInquiryDto(inquiry);
+                });
+    }
+
+    @Override
+    public Page<InquiryDto> getPagination(Integer pageNumber, Integer pageSize, String sort) {
+        Pageable pageable = null;
+        if (sort != null) {
+            // with sorting
+            pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.ASC, sort);
         } else {
-            return Optional.empty();
+            // without sorting
+            pageable = PageRequest.of(pageNumber, pageSize);
         }
+        Page<Inquiry> inquiryPage = inquiryRepository.findAll(pageable);
+        List<InquiryDto> inquiryDtos = inquiryPage.getContent().stream()
+                .map(inquiryMapper::inquiryToInquiryDto)
+                .collect(Collectors.toList());
+        return new PageImpl<>(inquiryDtos, pageable, inquiryPage.getTotalElements());
+
     }
 
 }

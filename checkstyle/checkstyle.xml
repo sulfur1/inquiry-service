@@ -114,7 +114,6 @@
 
         <!-- Checks for imports                              -->
         <!-- See https://checkstyle.org/config_imports.html -->
-        <module name="AvoidStarImport"/>
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>
         <module name="UnusedImports">
@@ -182,10 +181,7 @@
         <module name="DefaultComesLast"/>
 <!--        <module name="FinalLocalVariable"/>-->
         <module name="IllegalCatch"/>
-        <module name="IllegalThrows"/>
         <module name="ModifiedControlVariable"/>
-        <module name="EqualsAvoidNull"/>
-        <module name="MultipleStringLiterals"/>
         <module name="NestedForDepth"/>
         <module name="NestedIfDepth"/>
         <module name="NestedTryDepth">
