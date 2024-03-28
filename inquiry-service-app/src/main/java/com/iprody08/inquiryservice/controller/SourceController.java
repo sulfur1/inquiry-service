@@ -21,7 +21,6 @@ import java.util.List;
 public final class SourceController {
 
     private static final String NO_SOURCE_WITH_ID_MESSAGE = "There is no Source with id";
-    
     private final SourceService sourceService;
 
 
