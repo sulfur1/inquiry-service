@@ -21,7 +21,7 @@ import java.util.List;
 public final class SourceController {
     private final SourceService sourceService;
 
-    private final String noSourceWithIdString = "There is no Source with id";
+    private static final String NO_SOURCE_WITH_ID_MESSAGE = "There is no Source with id";
 
     public SourceController(final SourceService sourceService) {
         this.sourceService = sourceService;
@@ -35,7 +35,7 @@ public final class SourceController {
     @GetMapping("/sources/id/{id}")
     public SourceDto findById(@PathVariable long id) {
         return sourceService.findById(id)
-                .orElseThrow(() -> new NotFoundException(noSourceWithIdString + id));
+                .orElseThrow(() -> new NotFoundException(String.format(NO_SOURCE_WITH_ID_MESSAGE, id)));
     }
 
     @DeleteMapping("/sources/id/{id}")
@@ -53,7 +53,7 @@ public final class SourceController {
     public ResponseEntity<SourceDto> update(@PathVariable long id, @RequestBody SourceDto sourceDto) {
         return sourceService.update(id, sourceDto)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new NotFoundException(noSourceWithIdString + id));
+                .orElseThrow(() -> new NotFoundException(String.format(NO_SOURCE_WITH_ID_MESSAGE, id)));
     }
 
 }
