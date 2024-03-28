@@ -182,7 +182,6 @@
 <!--        <module name="FinalLocalVariable"/>-->
         <module name="IllegalCatch"/>
         <module name="ModifiedControlVariable"/>
-        <module name="EqualsAvoidNull"/>
         <module name="NestedForDepth"/>
         <module name="NestedIfDepth"/>
         <module name="NestedTryDepth">

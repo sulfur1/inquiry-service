@@ -43,5 +43,26 @@ public class Inquiry {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    private Long productRefId;
+
+    @Column(nullable = false)
+    private Long customerRefId;
+
+    @Column(nullable = false)
+    private Long managerRefId;
+
+    @PrePersist
+    public void prePersist() {
+        if (productRefId == null) {
+            productRefId = 0L;
+        }
+        if (customerRefId == null) {
+            customerRefId = 0L;
+        }
+        if (managerRefId == null) {
+            managerRefId = 0L;
+        }
+    }
 
 }

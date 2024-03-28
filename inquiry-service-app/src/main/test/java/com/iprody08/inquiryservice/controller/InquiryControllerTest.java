@@ -1,158 +1,153 @@
 package com.iprody08.inquiryservice.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iprody08.inquiryservice.dao.SourceRepository;
 import com.iprody08.inquiryservice.dto.InquiryDto;
-import com.iprody08.inquiryservice.exception_handlers.NotFoundException;
+import com.iprody08.inquiryservice.dto.SourceDto;
+import com.iprody08.inquiryservice.entity.Source;
+
+import com.iprody08.inquiryservice.dto.mapper.SourceMapper;
+import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
 import com.iprody08.inquiryservice.service.InquiryService;
+import com.iprody08.inquiryservice.service.SourceService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
-import java.util.Collections;
+import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.servlet.MockMvc;
+
 import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class InquiryControllerTest {
 
-    @Mock
-    InquiryService inquiryService;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @InjectMocks
-    InquiryController inquiryController;
+    @Autowired
+    private InquiryService inquiryService;
 
-    @Test
-    void contextLoads() throws Exception {
-        assertThat(inquiryController).isNotNull();
+    @Autowired
+    private SourceService sourceService;
+
+    @Autowired
+    private SourceRepository sourceRepository;
+
+    @Autowired
+    private SourceMapper sourceMapper;
+
+    @BeforeEach
+    void setUpEntity() {
+        SourceDto sourceDto = new SourceDto();
+        sourceDto.setName("Test name");
+        sourceService.save(sourceDto);
+        List<Source> sourceDto1 = sourceRepository.findAll();
+        SourceDto sourceDto2 = sourceMapper.sourceToSourceDto(sourceDto1.get(0));
+        InquiryDto one = new InquiryDto( sourceDto2, "YESSSSS", InquiryStatus.NEW, "note");
+        InquiryDto two = new InquiryDto( sourceDto2, "comment2", InquiryStatus.REJECTED, "note");
+
+        List<InquiryDto> inquiryDtoList = List.of(one, two);
+
+        for (InquiryDto inquiryDto : inquiryDtoList ) {
+            inquiryService.save(inquiryDto);
+        }
     }
 
     @Test
-    public void findAll_ReturnsValidSourceDto(){
+    @DirtiesContext
+    void FindByIdAndCompareResults() throws Exception {
+        // given
+        InquiryDto inquiryDto = inquiryService.findAll().get(0);
 
+        // when
+        mockMvc.perform(get("/api/v1/inquiries/id/{id}", inquiryDto.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+        //then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(inquiryDto.getId()))
+                .andExpect(jsonPath("$.status").value(inquiryDto.getStatus().name()))
+                .andExpect(jsonPath("$.comment").value(inquiryDto.getComment()))
+                .andDo(print());
+    }
+
+    @Test
+    @DirtiesContext
+    void FindAllAndCheckSize() throws Exception {
+        // when
+        mockMvc.perform(get("/api/v1/inquiries")
+                        .contentType(MediaType.APPLICATION_JSON))
+        //then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andDo(print());
+    }
+
+    @Test
+    @DirtiesContext
+    void deleteAndCheckDecreaseSize() throws Exception {
+        //when
+        mockMvc.perform(delete("/api/v1/inquiries/id/{id}", 1L))
+        //then
+                .andExpect(status().isOk())
+                .andDo(print());
+        List<InquiryDto> inquiryDtos = inquiryService.findAll();
+        assertEquals(1, inquiryDtos.size());
+        assertEquals(2, inquiryDtos.get(0).getId());
+    }
+
+    @Test
+    @DirtiesContext
+    void createAndCheckIncreaseSize()  throws Exception {
         //given
-        List<InquiryDto> expectedInquiries = Arrays.asList(
-                new InquiryDto(),
-                new InquiryDto()
-        );
-        when(inquiryController.findAll()).thenReturn(expectedInquiries);
+        List<InquiryDto> inquiryDtos = inquiryService.findAll();
+        assertEquals(2, inquiryDtos.size());
+        SourceDto sourceDto = inquiryDtos.get(0).getSourceId();
+        InquiryDto newInquiryDto = new InquiryDto( sourceDto, "newInquiryDto", InquiryStatus.PAYMENT, "newInquiryDto");
+        //when
+        mockMvc.perform(post("/api/v1/inquiries")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(newInquiryDto)))
+        //then
+                .andExpect(status().isCreated())
+                .andDo(print());
+        inquiryDtos = inquiryService.findAll();
+        assertEquals(3, inquiryDtos.size());
+        assertEquals("newInquiryDto", inquiryDtos.get(2).getComment());
+
+    }
+
+    @Test
+    @DirtiesContext
+    void updateAndCheckChangedBody()  throws Exception {
+        //given
+        InquiryDto inquiryDto = inquiryService.findAll().get(0);
+        inquiryDto.setStatus(InquiryStatus.PAID);
+
+        assertEquals(2, inquiryService.findAll().size());
 
         //when
-        List<InquiryDto> actualInquiries = inquiryController.findAll();
-
+        mockMvc.perform(put("/api/v1/inquiries/id/{id}", inquiryDto.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(inquiryDto)))
         //then
-        assertEquals(expectedInquiries.size(), actualInquiries.size());
-        assertTrue(actualInquiries.containsAll(expectedInquiries));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value(inquiryDto.getStatus().name()))
+                .andDo(print());
 
+        assertEquals(2, inquiryService.findAll().size());
     }
-
-    @Test
-    public void findAll_ReturnsEmptyList_WhenNoSourcesExist() {
-
-        //given
-        when(inquiryService.findAll()).thenReturn(Collections.emptyList());
-
-        // when
-        List<InquiryDto> actualInquiries = inquiryController.findAll();
-
-        // then
-        assertTrue(actualInquiries.isEmpty());
-    }
-
-    @Test
-    public void findAll_ThrowsException_WhenDatabaseConnectionFails() {
-
-        // given
-        when(inquiryService.findAll()).thenThrow(new RuntimeException("Database connection failed"));
-
-        // then
-        assertThrows(RuntimeException.class, () -> inquiryController.findAll());
-    }
-
-    @Test
-    public void findById_ReturnsValidSourceDto() {
-
-        // given
-        long id = 1L;
-        InquiryDto expectedInquiry= new InquiryDto();
-        when(inquiryService.findById(id)).thenReturn(Optional.of(expectedInquiry));
-
-        // when
-        InquiryDto actualSource = inquiryController.findById(id);
-
-        // then
-        assertEquals(expectedInquiry, actualSource);
-    }
-
-    @Test
-    public void findById_ThrowsNotFoundException_WhenSourceNotFound() {
-
-        // given
-        long id = 1L;
-        when(inquiryService.findById(id)).thenReturn(Optional.empty());
-
-        // then
-        assertThrows(NotFoundException.class, () -> inquiryController.findById(id));
-    }
-
-    @Test
-    public void deleteById_NoExceptionsThrown() {
-
-        // given
-        long id = 1L;
-
-        // when
-        assertDoesNotThrow(() -> inquiryController.deleteById(id));
-    }
-
-    @Test
-    public void save_ReturnsCreatedStatus() {
-
-        // given
-        InquiryDto inquiryDto = new InquiryDto();
-
-        // when
-        ResponseEntity<Void> responseEntity = inquiryController.save(inquiryDto);
-
-        // then
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void update_ReturnsUpdatedSourceDto() {
-
-        // given
-        long id = 1L;
-        InquiryDto inquiryDto = new InquiryDto();
-        when(inquiryService.update(id, inquiryDto)).thenReturn(Optional.of(inquiryDto));
-
-        // when
-        ResponseEntity<InquiryDto> responseEntity = inquiryController.update(id, inquiryDto);
-
-        // then
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(inquiryDto, responseEntity.getBody());
-    }
-
-    @Test
-    public void update_ThrowsNotFoundException_WhenSourceNotFound() {
-
-        // given
-        long id = 1L;
-        InquiryDto inquiryDto = new InquiryDto();
-        when(inquiryService.update(id, inquiryDto)).thenReturn(Optional.empty());
-
-        // then
-        assertThrows(NotFoundException.class, () -> inquiryController.update(id, inquiryDto));
-    }
-
 }

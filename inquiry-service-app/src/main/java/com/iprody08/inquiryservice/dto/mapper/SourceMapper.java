@@ -8,10 +8,10 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface SourceMapper {
-    @Mapping(target = "inquiryDto", source = "inquiries")
     SourceDto sourceToSourceDto(Source source);
 
-    @Mapping(target = "inquiries", source = "inquiryDto")
+    @Mapping(target = "inquiries", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Source sourceDtoToSource(SourceDto sourceDto);
 
     @Mapping(target = "inquiries", ignore = true)

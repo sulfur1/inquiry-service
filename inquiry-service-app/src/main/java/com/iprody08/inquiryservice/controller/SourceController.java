@@ -19,8 +19,13 @@ public final class SourceController {
     }
 
     @GetMapping("/sources")
-    public List<SourceDto> findAll() {
-        return sourceService.findAll();
+    public List<SourceDto> findAll(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "25") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc")String sortDirection,
+            @RequestParam(required = false) String filterBy) {
+        return sourceService.findAll(pageNo, pageSize, sortBy, sortDirection, filterBy);
     }
 
     @GetMapping("/sources/id/{id}")
@@ -42,7 +47,7 @@ public final class SourceController {
 
     @PutMapping("/sources/id/{id}")
     public ResponseEntity<SourceDto> update(@PathVariable long id, @RequestBody SourceDto sourceDto) {
-        return sourceService.update(id, sourceDto)
+        return sourceService.update(sourceDto)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new NotFoundException("There is no Source with id " + id));
     }

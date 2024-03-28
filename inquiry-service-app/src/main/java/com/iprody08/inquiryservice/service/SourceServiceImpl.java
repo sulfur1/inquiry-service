@@ -5,6 +5,10 @@ import com.iprody08.inquiryservice.dto.SourceDto;
 import com.iprody08.inquiryservice.dto.mapper.SourceMapper;
 import com.iprody08.inquiryservice.entity.Source;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,11 +27,32 @@ public class SourceServiceImpl implements SourceService {
     }
 
     @Override
-    public List<SourceDto> findAll() {
-        return sourceRepository.findAllWithSources()
+    public List<SourceDto> findAll(Integer pageNo, Integer pageSize, String sortBy,
+                                   String sortDirection, String filterBy) {
+
+        Sort.Direction direction = sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Sort sort = Sort.by(direction, sortBy);
+
+        Pageable paging = PageRequest.of(pageNo, pageSize, sort);
+
+        List<Source> resultList = null;
+
+        if (filterBy != null && !filterBy.isEmpty()) {
+           resultList = sourceRepository.findAllWithInquiryAndFilter(filterBy, paging);
+        } else {
+            resultList = sourceRepository.findAllWithInquiry(paging);
+        }
+
+        return resultList
                 .stream()
                 .map(sourceMapper::sourceToSourceDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SourceDto> findAll() {
+        return null;
     }
 
     @Override
@@ -48,13 +73,24 @@ public class SourceServiceImpl implements SourceService {
     }
 
     @Override
-    public Optional<SourceDto> update(long id, SourceDto sourceDto) {
-        return sourceRepository.findById(id)
+    public void deleteAll() {
+        sourceRepository.deleteAll();
+    }
+
+    @Override
+    public Optional<SourceDto> update(SourceDto sourceDto) {
+        return sourceRepository.findById(sourceDto.getId())
                 .map(source -> {
                     sourceMapper.updateSourceFromDto(sourceDto, source);
                     sourceRepository.save(source);
                     return sourceMapper.sourceToSourceDto(source);
                 });
     }
+
+    @Override
+    public Page<SourceDto> getPagination(Integer pageNumber, Integer pageSize, String sort) {
+        return null;
+    }
+
 
 }
