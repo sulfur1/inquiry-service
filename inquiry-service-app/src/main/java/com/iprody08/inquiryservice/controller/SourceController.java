@@ -19,9 +19,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1")
 public final class SourceController {
-    private final SourceService sourceService;
 
     private static final String NO_SOURCE_WITH_ID_MESSAGE = "There is no Source with id";
+    
+    private final SourceService sourceService;
+
 
     public SourceController(final SourceService sourceService) {
         this.sourceService = sourceService;
