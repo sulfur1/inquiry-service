@@ -52,6 +52,7 @@ class InquiryControllerTest {
 
     @BeforeEach
     void setUpEntity() {
+        // given
         SourceDto sourceDto = new SourceDto();
         sourceDto.setName("Test name");
         sourceService.save(sourceDto);
@@ -62,18 +63,15 @@ class InquiryControllerTest {
 
         List<InquiryDto> inquiryDtoList = List.of(one, two);
 
-        for (InquiryDto inquiryDto : inquiryDtoList ) {
-            inquiryService.save(inquiryDto);
-        }
+        inquiryDtoList.forEach(dto->inquiryService.save(dto));
+
     }
 
     @Test
     @DirtiesContext
     void FindByIdAndCompareResults() throws Exception {
-        // given
-        InquiryDto inquiryDto = inquiryService.findAll().get(0);
-
         // when
+        InquiryDto inquiryDto = inquiryService.findAll().get(0);
         mockMvc.perform(get("/api/v1/inquiries/id/{id}", inquiryDto.getId())
                         .contentType(MediaType.APPLICATION_JSON))
         //then

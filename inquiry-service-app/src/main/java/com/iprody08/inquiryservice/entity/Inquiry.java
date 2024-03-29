@@ -43,7 +43,7 @@ public class Inquiry {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Column(nullable = false)
+    @Column(nullable = false )
     private Long productRefId;
 
     @Column(nullable = false)

@@ -58,8 +58,7 @@ public class InquiryServiceImpl implements InquiryService {
                 .map(inquiry -> {
                     inquiryMapper.updateInquiryFromDto(inquiryDto, inquiry);
                     inquiry.setStatus(inquiryDto.getStatus());
-                    inquiryRepository.save(inquiry);
-                    return inquiryMapper.inquiryToInquiryDto(inquiry);
+                    return inquiryMapper.inquiryToInquiryDto(inquiryRepository.save(inquiry));
                 });
     }
 
