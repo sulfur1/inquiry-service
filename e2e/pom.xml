@@ -4,15 +4,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.3</version>
-        <relativePath/>
+        <groupId>com.iprodi08</groupId>
+        <artifactId>inquiry-service</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>e2e</artifactId>
     <name>e2e</name>
     <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <checkstyle.dir>${basedir}/../checkstyle</checkstyle.dir>
+    </properties>
 
     <dependencies>
         <dependency>
