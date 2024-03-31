@@ -4,11 +4,9 @@ import com.iprody08.inquiryservice.dao.SourceRepository;
 import com.iprody08.inquiryservice.dto.SourceDto;
 import com.iprody08.inquiryservice.dto.mapper.SourceMapper;
 import com.iprody08.inquiryservice.entity.Source;
+import com.iprody08.inquiryservice.pagination.PaginationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,13 +28,8 @@ public class SourceServiceImpl implements SourceService {
     public List<SourceDto> findAll(Integer pageNo, Integer pageSize, String sortBy,
                                    String sortDirection, String filterBy) {
 
-        Sort.Direction direction = sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-
-        Sort sort = Sort.by(direction, sortBy);
-
-        Pageable paging = PageRequest.of(pageNo, pageSize, sort);
-
-        List<Source> resultList = null;
+        Pageable paging = PaginationUtils.getPageable(pageNo, pageSize, sortBy, sortDirection);
+        List<Source> resultList;
 
         if (filterBy != null && !filterBy.isEmpty()) {
            resultList = sourceRepository.findAllWithInquiryAndFilter(filterBy, paging);
@@ -85,11 +78,6 @@ public class SourceServiceImpl implements SourceService {
                     sourceRepository.save(source);
                     return sourceMapper.sourceToSourceDto(source);
                 });
-    }
-
-    @Override
-    public Page<SourceDto> getPagination(Integer pageNumber, Integer pageSize, String sort) {
-        return null;
     }
 
 

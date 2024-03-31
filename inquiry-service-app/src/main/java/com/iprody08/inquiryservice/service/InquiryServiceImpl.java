@@ -1,11 +1,15 @@
 package com.iprody08.inquiryservice.service;
 
 import com.iprody08.inquiryservice.dao.InquiryRepository;
+import com.iprody08.inquiryservice.dao.InquirySpecifications;
 import com.iprody08.inquiryservice.dto.InquiryDto;
 import com.iprody08.inquiryservice.dto.mapper.InquiryMapper;
 import com.iprody08.inquiryservice.entity.Inquiry;
 import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
+import com.iprody08.inquiryservice.filter.InquiryFilter;
+import com.iprody08.inquiryservice.pagination.PaginationUtils;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,10 +27,41 @@ public class InquiryServiceImpl implements InquiryService {
     }
     @Override
     public List<InquiryDto> findAll() {
-        return inquiryRepository.findAllWithSource()
+        return null;
+    }
+
+    @Override
+    public List<InquiryDto> findAll(Integer pageNo, Integer pageSize, String sortBy,
+                                    String sortDirection, InquiryFilter filterBy) {
+
+        Pageable paging = PaginationUtils.getPageable(pageNo, pageSize, sortBy, sortDirection);
+
+        List<Inquiry> resultList;
+
+        Specification<Inquiry> spec = Specification.where(null);
+
+        if (filterBy != null && filterBy.checkFilterExists()) {
+
+            if (filterBy.getStatus() != null) {
+                spec = spec.and(InquirySpecifications.hasStatus(filterBy.getStatus()));
+            }
+            if (filterBy.getComment() != null) {
+                spec = spec.and(InquirySpecifications.hasComment(filterBy.getComment()));
+            }
+            if (filterBy.getNote() != null) {
+                spec = spec.and(InquirySpecifications.hasNote(filterBy.getNote()));
+            }
+            resultList = inquiryRepository.findAllAndFilter(spec, paging);
+
+        } else {
+            resultList = inquiryRepository.findAllWithSource(paging);
+        }
+
+        return resultList
                 .stream()
                 .map(inquiryMapper::inquiryToInquiryDto)
                 .collect(Collectors.toList());
+
     }
 
     @Override
@@ -62,22 +97,5 @@ public class InquiryServiceImpl implements InquiryService {
                 });
     }
 
-    @Override
-    public Page<InquiryDto> getPagination(Integer pageNumber, Integer pageSize, String sort) {
-        Pageable pageable = null;
-        if (sort != null) {
-            // with sorting
-            pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.ASC, sort);
-        } else {
-            // without sorting
-            pageable = PageRequest.of(pageNumber, pageSize);
-        }
-        Page<Inquiry> inquiryPage = inquiryRepository.findAll(pageable);
-        List<InquiryDto> inquiryDtos = inquiryPage.getContent().stream()
-                .map(inquiryMapper::inquiryToInquiryDto)
-                .collect(Collectors.toList());
-        return new PageImpl<>(inquiryDtos, pageable, inquiryPage.getTotalElements());
-
-    }
 
 }
