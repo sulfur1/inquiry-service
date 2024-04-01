@@ -36,7 +36,7 @@ public class InquiryServiceImpl implements InquiryService {
 
         Pageable paging = PaginationUtils.getPageable(pageNo, pageSize, sortBy, sortDirection);
 
-        List<Inquiry> resultList;
+        Page<Inquiry> inquiryPage;
 
         Specification<Inquiry> spec = Specification.where(null);
 
@@ -51,13 +51,13 @@ public class InquiryServiceImpl implements InquiryService {
             if (filterBy.getNote() != null) {
                 spec = spec.and(InquirySpecifications.hasNote(filterBy.getNote()));
             }
-            resultList = inquiryRepository.findAllAndFilter(spec, paging);
+            inquiryPage = inquiryRepository.findAll(spec, paging);
 
         } else {
-            resultList = inquiryRepository.findAllWithSource(paging);
+            inquiryPage = inquiryRepository.findAllWithSource(paging);
         }
 
-        return resultList
+        return inquiryPage.getContent()
                 .stream()
                 .map(inquiryMapper::inquiryToInquiryDto)
                 .collect(Collectors.toList());
@@ -96,6 +96,5 @@ public class InquiryServiceImpl implements InquiryService {
                     return inquiryMapper.inquiryToInquiryDto(inquiryRepository.save(inquiry));
                 });
     }
-
-
 }
+

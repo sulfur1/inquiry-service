@@ -10,11 +10,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InquiryFilter {
+public class InquiryFilter implements DtoFilter {
     private InquiryStatus status;
     private String comment;
     private String note;
 
+    @Override
     public boolean checkFilterExists() {
         return status != null && !status.toString().isEmpty() || comment != null || note != null;
     }

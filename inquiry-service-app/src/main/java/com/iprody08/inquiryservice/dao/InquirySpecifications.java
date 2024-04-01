@@ -6,14 +6,17 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class InquirySpecifications {
     public static Specification<Inquiry> hasStatus(InquiryStatus status) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status"), status);
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(criteriaBuilder.upper(root.get("status")), status.toString().toUpperCase());
     }
 
     public static Specification<Inquiry> hasComment(String comment) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("comment"), "%" + comment + "%");
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.like(criteriaBuilder.upper(root.get("comment")), "%" + comment.toUpperCase() + "%");
     }
 
     public static Specification<Inquiry> hasNote(String note) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("note"), "%" + note + "%");
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.like(criteriaBuilder.upper(root.get("note")), "%" + note.toUpperCase() + "%");
     }
 }

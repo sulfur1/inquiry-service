@@ -2,6 +2,7 @@ package com.iprody08.inquiryservice.controller;
 
 import com.iprody08.inquiryservice.dto.SourceDto;
 import com.iprody08.inquiryservice.exception_handlers.NotFoundException;
+import com.iprody08.inquiryservice.filter.SourceFilter;
 import com.iprody08.inquiryservice.service.SourceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,10 @@ public final class SourceController {
             @RequestParam(defaultValue = "25") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc")String sortDirection,
-            @RequestParam(required = false) String filterBy) {
-        return sourceService.findAll(pageNo, pageSize, sortBy, sortDirection, filterBy);
+            @RequestParam(required = false) String name) {
+        SourceFilter filter = new SourceFilter();
+        filter.setName(name);
+        return sourceService.findAll(pageNo, pageSize, sortBy, sortDirection, filter);
     }
 
     @GetMapping("/sources/id/{id}")
@@ -54,5 +57,5 @@ public final class SourceController {
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new NotFoundException(String.format(NO_SOURCE_WITH_ID_MESSAGE, id)));
     }
-
 }
+

@@ -1,12 +1,16 @@
 package com.iprody08.inquiryservice.service;
 
 import com.iprody08.inquiryservice.dao.SourceRepository;
+import com.iprody08.inquiryservice.dao.SourceSpecification;
 import com.iprody08.inquiryservice.dto.SourceDto;
 import com.iprody08.inquiryservice.dto.mapper.SourceMapper;
 import com.iprody08.inquiryservice.entity.Source;
+import com.iprody08.inquiryservice.filter.SourceFilter;
 import com.iprody08.inquiryservice.pagination.PaginationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,18 +30,22 @@ public class SourceServiceImpl implements SourceService {
 
     @Override
     public List<SourceDto> findAll(Integer pageNo, Integer pageSize, String sortBy,
-                                   String sortDirection, String filterBy) {
+                                   String sortDirection, SourceFilter filterBy) {
 
         Pageable paging = PaginationUtils.getPageable(pageNo, pageSize, sortBy, sortDirection);
-        List<Source> resultList;
+        Page<Source> sourcePage;
+        Specification<Source> spec = Specification.where(null);
 
-        if (filterBy != null && !filterBy.isEmpty()) {
-           resultList = sourceRepository.findAllWithInquiryAndFilter(filterBy, paging);
+        if (filterBy != null && filterBy.checkFilterExists()) {
+            if (filterBy.getName() != null) {
+                spec = spec.and(SourceSpecification.hasName(filterBy.getName()));
+            }
+            sourcePage = sourceRepository.findAll(spec, paging);
         } else {
-            resultList = sourceRepository.findAllWithInquiry(paging);
+            sourcePage = sourceRepository.findAllWithInquiry(paging);
         }
 
-        return resultList
+        return sourcePage.getContent()
                 .stream()
                 .map(sourceMapper::sourceToSourceDto)
                 .collect(Collectors.toList());
@@ -79,6 +87,4 @@ public class SourceServiceImpl implements SourceService {
                     return sourceMapper.sourceToSourceDto(source);
                 });
     }
-
-
 }
