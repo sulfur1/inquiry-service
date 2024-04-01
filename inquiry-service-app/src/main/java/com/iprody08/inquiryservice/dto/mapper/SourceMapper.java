@@ -16,7 +16,5 @@ public interface SourceMapper {
 
     @Mapping(target = "inquiries", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
     void updateSourceFromDto(SourceDto sourceDto, @MappingTarget Source source);
 }
