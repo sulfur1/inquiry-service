@@ -8,5 +8,7 @@ public interface BaseService<T> {
     void save(T entity);
     Optional<T> findById(long id);
     void deleteById(long id);
-    Optional<T> update(long id, T entity);
+    void deleteAll();
+    Optional<T> update(T entity);
+
 }

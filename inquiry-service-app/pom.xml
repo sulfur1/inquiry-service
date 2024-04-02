@@ -11,7 +11,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>product-service-app</artifactId>
+	<artifactId>inquiry-service-app</artifactId>
 
 	<properties>
 		<checkstyle.dir>${basedir}/../checkstyle</checkstyle.dir>

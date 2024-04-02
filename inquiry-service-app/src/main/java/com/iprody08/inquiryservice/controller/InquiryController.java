@@ -1,18 +1,13 @@
 package com.iprody08.inquiryservice.controller;
 
 import com.iprody08.inquiryservice.dto.InquiryDto;
+import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
 import com.iprody08.inquiryservice.exception_handlers.NotFoundException;
+import com.iprody08.inquiryservice.filter.InquiryFilter;
 import com.iprody08.inquiryservice.service.InquiryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,8 +27,19 @@ public final class InquiryController {
     }
 
     @GetMapping("/inquiries")
-    public List<InquiryDto> findAll() {
-        return inquiryService.findAll();
+    public List<InquiryDto> findAll(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "25") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc")String sortDirection,
+            @RequestParam(required = false) InquiryStatus status,
+            @RequestParam(required = false) String comment,
+            @RequestParam(required = false) String note) {
+        InquiryFilter filter = new InquiryFilter();
+        filter.setStatus(status);
+        filter.setComment(comment);
+        filter.setNote(note);
+        return inquiryService.findAll(pageNo, pageSize, sortBy, sortDirection, filter);
     }
 
     @DeleteMapping("/inquiries/id/{id}")
@@ -49,7 +55,7 @@ public final class InquiryController {
 
     @PutMapping("/inquiries/id/{id}")
     public ResponseEntity<InquiryDto> update(@PathVariable long id, @RequestBody InquiryDto inquiryDto) {
-        return inquiryService.update(id, inquiryDto)
+        return inquiryService.update(inquiryDto)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new NotFoundException("There is no Source with id " + id));
     }
