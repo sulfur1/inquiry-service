@@ -27,7 +27,10 @@ public class InquiryServiceImpl implements InquiryService {
     }
     @Override
     public List<InquiryDto> findAll() {
-        return null;
+        return inquiryRepository.findAll()
+                .stream()
+                .map(inquiryMapper::inquiryToInquiryDto)
+                .collect(Collectors.toList());
     }
 
     @Override

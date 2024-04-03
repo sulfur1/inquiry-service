@@ -53,7 +53,10 @@ public class SourceServiceImpl implements SourceService {
 
     @Override
     public List<SourceDto> findAll() {
-        return null;
+        return sourceRepository.findAll()
+                .stream()
+                .map(sourceMapper::sourceToSourceDto)
+                .collect(Collectors.toList());
     }
 
     @Override

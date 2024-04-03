@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -57,20 +57,21 @@ class InquiryControllerTest {
         sourceService.save(sourceDto);
         List<Source> sourceDto1 = sourceRepository.findAll();
         SourceDto sourceDto2 = sourceMapper.sourceToSourceDto(sourceDto1.get(0));
-        InquiryDto one = new InquiryDto( sourceDto2, "YESSSSS", InquiryStatus.NEW, "note");
-        InquiryDto two = new InquiryDto( sourceDto2, "comment2", InquiryStatus.REJECTED, "note");
+         InquiryDto one = new InquiryDto(sourceDto2, "YESSSSS", InquiryStatus.NEW, "note");
+        InquiryDto two = new InquiryDto(sourceDto2, "comment2", InquiryStatus.REJECTED, "note");
 
         List<InquiryDto> inquiryDtoList = List.of(one, two);
 
-        inquiryDtoList.forEach(dto->inquiryService.save(dto));
-
+        inquiryDtoList.forEach(dto -> inquiryService.save(dto));
     }
 
     @Test
     @DirtiesContext
     void FindByIdAndCompareResults() throws Exception {
         // when
-        InquiryDto inquiryDto = inquiryService.findAll().get(0);
+        List<InquiryDto> inquiryDtoList = inquiryService.findAll(0, 10, "id", "asc", null);
+        assertFalse(inquiryDtoList.isEmpty(), "The list of inquiries is empty.");
+        InquiryDto inquiryDto = inquiryDtoList.get(0);
         mockMvc.perform(get("/api/v1/inquiries/id/{id}", inquiryDto.getId())
                         .contentType(MediaType.APPLICATION_JSON))
         //then
@@ -111,9 +112,10 @@ class InquiryControllerTest {
     void createAndCheckIncreaseSize()  throws Exception {
         //given
         List<InquiryDto> inquiryDtos = inquiryService.findAll();
+
         assertEquals(2, inquiryDtos.size());
         SourceDto sourceDto = inquiryDtos.get(0).getSourceId();
-        InquiryDto newInquiryDto = new InquiryDto( sourceDto, "newInquiryDto", InquiryStatus.PAYMENT, "newInquiryDto");
+        InquiryDto newInquiryDto = new InquiryDto(sourceDto, "newInquiryDto", InquiryStatus.PAYMENT, "newInquiryDto");
         //when
         mockMvc.perform(post("/api/v1/inquiries")
                         .contentType(MediaType.APPLICATION_JSON)

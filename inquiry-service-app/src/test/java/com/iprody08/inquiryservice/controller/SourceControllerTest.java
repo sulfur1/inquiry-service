@@ -1,12 +1,7 @@
 package com.iprody08.inquiryservice.controller;
 
-import com.iprody08.inquiryservice.dao.SourceRepository;
-import com.iprody08.inquiryservice.dto.InquiryDto;
 import com.iprody08.inquiryservice.dto.SourceDto;
-import com.iprody08.inquiryservice.dto.mapper.SourceMapper;
-import com.iprody08.inquiryservice.entity.Source;
-import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
-import com.iprody08.inquiryservice.service.InquiryService;
+
 import com.iprody08.inquiryservice.service.SourceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,21 +22,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class SourceControllerTest {
 
-
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private InquiryService inquiryService;
-
-    @Autowired
     private SourceService sourceService;
-
-    @Autowired
-    private SourceRepository sourceRepository;
-
-    @Autowired
-    private SourceMapper sourceMapper;
 
     @BeforeEach
     void setUpEntity() {
@@ -69,8 +52,22 @@ class SourceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 //then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1))) // Ожидаемый размер списка после фильтрации
+                .andExpect(jsonPath("$", hasSize(2)))
                 .andDo(print());
     }
 
+    @Test
+    @DirtiesContext
+    void createAndCheckIncreaseSize()  throws Exception {
+        // when
+        SourceDto sourceDto = new SourceDto();
+        sourceDto.setName("New source##3");
+        sourceService.save(sourceDto);
+        mockMvc.perform(get("/api/v1/sources")
+            .contentType(MediaType.APPLICATION_JSON))
+            //then
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(3)))
+            .andDo(print());
+    }
 }
