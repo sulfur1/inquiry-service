@@ -8,6 +8,7 @@ import com.iprody08.inquiryservice.dto.SourceDto;
 import com.iprody08.inquiryservice.dto.mapper.SourceMapper;
 import com.iprody08.inquiryservice.entity.Source;
 import com.iprody08.inquiryservice.filter.SourceFilter;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +40,11 @@ class SourceServiceImplTest {
     void setUp() {
         source = new Source();
         sourceDto = new SourceDto(null, "Test Name");
+    }
+
+    @AfterEach
+    void clearRepository() {
+        sourceService.deleteAll();
     }
 
     @Test
