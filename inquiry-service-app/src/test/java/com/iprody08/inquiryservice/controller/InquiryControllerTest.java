@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 class InquiryControllerTest {
 
     @Autowired
@@ -66,7 +68,6 @@ class InquiryControllerTest {
     }
 
     @Test
-    @DirtiesContext
     void FindByIdAndCompareResults() throws Exception {
         // when
         List<InquiryDto> inquiryDtoList = inquiryService.findAll(0, 10, "id", "asc", null);
@@ -83,7 +84,6 @@ class InquiryControllerTest {
     }
 
     @Test
-    @DirtiesContext
     void FindAllAndCheckSize() throws Exception {
         // when
         mockMvc.perform(get("/api/v1/inquiries")
@@ -95,7 +95,6 @@ class InquiryControllerTest {
     }
 
     @Test
-    @DirtiesContext
     void deleteAndCheckDecreaseSize() throws Exception {
         //when
         mockMvc.perform(delete("/api/v1/inquiries/id/{id}", 1L))
@@ -108,7 +107,6 @@ class InquiryControllerTest {
     }
 
     @Test
-    @DirtiesContext
     void createAndCheckIncreaseSize()  throws Exception {
         //given
         List<InquiryDto> inquiryDtos = inquiryService.findAll();
@@ -130,7 +128,6 @@ class InquiryControllerTest {
     }
 
     @Test
-    @DirtiesContext
     void updateAndCheckChangedBody()  throws Exception {
         //given
         InquiryDto inquiryDto = inquiryService.findAll().get(0);
