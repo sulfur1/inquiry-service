@@ -10,10 +10,11 @@ import com.iprody08.inquiryservice.dto.mapper.SourceMapper;
 import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
 import com.iprody08.inquiryservice.service.InquiryService;
 import com.iprody08.inquiryservice.service.SourceService;
-import org.junit.jupiter.api.AfterEach;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
+@Log4j2
 class InquiryControllerTest {
 
     @Autowired
@@ -64,18 +66,11 @@ class InquiryControllerTest {
         InquiryDto two = new InquiryDto(sourceDto2, "comment2", InquiryStatus.REJECTED, "note");
 
         List<InquiryDto> inquiryDtoList = List.of(one, two);
-
         inquiryDtoList.forEach(dto -> inquiryService.save(dto));
     }
 
-    @AfterEach
-    void clearRepository() {
-       inquiryService.deleteAll();
-       sourceService.deleteAll();
-    }
-
     @Test
-    void FindByIdAndCompareResults() throws Exception {
+    void FindByIdAndCompareResults(TestInfo testInfo) throws Exception {
         // when
         List<InquiryDto> inquiryDtoList = inquiryService.findAll(0, 10, "id", "asc", null);
         assertFalse(inquiryDtoList.isEmpty(), "The list of inquiries is empty.");
@@ -91,7 +86,7 @@ class InquiryControllerTest {
     }
 
     @Test
-    void FindAllAndCheckSize() throws Exception {
+    void FindAllAndCheckSize(TestInfo testInfo) throws Exception {
         // when
         mockMvc.perform(get("/api/v1/inquiries")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -102,7 +97,7 @@ class InquiryControllerTest {
     }
 
     @Test
-    void deleteAndCheckDecreaseSize() throws Exception {
+    void deleteAndCheckDecreaseSize(TestInfo testInfo) throws Exception {
         //when
         mockMvc.perform(delete("/api/v1/inquiries/id/{id}", 1L))
         //then
@@ -114,7 +109,7 @@ class InquiryControllerTest {
     }
 
     @Test
-    void createAndCheckIncreaseSize()  throws Exception {
+    void createAndCheckIncreaseSize(TestInfo testInfo)  throws Exception {
         //given
         List<InquiryDto> inquiryDtos = inquiryService.findAll();
 
@@ -135,7 +130,7 @@ class InquiryControllerTest {
     }
 
     @Test
-    void updateAndCheckChangedBody()  throws Exception {
+    void updateAndCheckChangedBody(TestInfo testInfo)  throws Exception {
         //given
         InquiryDto inquiryDto = inquiryService.findAll().get(0);
         inquiryDto.setStatus(InquiryStatus.PAID);

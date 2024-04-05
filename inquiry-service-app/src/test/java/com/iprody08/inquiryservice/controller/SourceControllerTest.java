@@ -3,7 +3,6 @@ package com.iprody08.inquiryservice.controller;
 import com.iprody08.inquiryservice.dto.SourceDto;
 
 import com.iprody08.inquiryservice.service.SourceService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +40,11 @@ class SourceControllerTest {
         sourceDto2.setName("Test2 name");
         sourceService.save(sourceDto2);
     }
-
+/*
     @AfterEach
     void clearRepository() {
         sourceService.deleteAll();
-    }
+    }*/
 
     @Test
     void FindAllAndCheckSize() throws Exception {
