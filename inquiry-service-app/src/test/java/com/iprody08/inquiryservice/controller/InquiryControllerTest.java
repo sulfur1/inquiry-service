@@ -10,6 +10,7 @@ import com.iprody08.inquiryservice.dto.mapper.SourceMapper;
 import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
 import com.iprody08.inquiryservice.service.InquiryService;
 import com.iprody08.inquiryservice.service.SourceService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 class InquiryControllerTest {
 
     @Autowired
@@ -67,7 +67,11 @@ class InquiryControllerTest {
         inquiryDtoList.forEach(dto -> inquiryService.save(dto));
     }
 
-
+    @AfterEach
+    void clearRepository() {
+       inquiryService.deleteAll();
+       sourceService.deleteAll();
+    }
 
     @Test
     void FindByIdAndCompareResults() throws Exception {
