@@ -68,11 +68,7 @@ class InquiryControllerTest {
         inquiryDtoList.forEach(dto -> inquiryService.save(dto));
     }
 
-    @AfterEach
-    void clearRepository() {
-       inquiryService.deleteAll();
-       sourceService.deleteAll();
-    }
+
 
     @Test
     void FindByIdAndCompareResults() throws Exception {
