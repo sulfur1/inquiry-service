@@ -14,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -79,9 +80,9 @@ class InquiryControllerTest {
     }*/
 
     @Test
-    void FindByIdAndCompareResults() throws Exception {
+    void FindByIdAndCompareResults(TestInfo testInfo) throws Exception {
         log.info("Start test method "
-                +  getClass().getEnclosingMethod().getName()
+                +  testInfo.getDisplayName()
                 + "inquiryService.SIZE = " + inquiryService.findAll().size()
                 + "sourceService.SIZE  = " + sourceService.findAll().size());
         // when
@@ -99,9 +100,9 @@ class InquiryControllerTest {
     }
 
     @Test
-    void FindAllAndCheckSize() throws Exception {
+    void FindAllAndCheckSize(TestInfo testInfo) throws Exception {
         log.info("Start test method "
-                +  getClass().getEnclosingMethod().getName()
+                +  testInfo.getDisplayName()
                 + "inquiryService.SIZE = " + inquiryService.findAll().size()
                 + "sourceService.SIZE  = " + sourceService.findAll().size());
         // when
@@ -114,9 +115,9 @@ class InquiryControllerTest {
     }
 
     @Test
-    void deleteAndCheckDecreaseSize() throws Exception {
+    void deleteAndCheckDecreaseSize(TestInfo testInfo) throws Exception {
         log.info("Start test method "
-                +  getClass().getEnclosingMethod().getName()
+                +  testInfo.getDisplayName()
                 + "inquiryService.SIZE = " + inquiryService.findAll().size()
                 + "sourceService.SIZE  = " + sourceService.findAll().size());
         //when
@@ -130,9 +131,9 @@ class InquiryControllerTest {
     }
 
     @Test
-    void createAndCheckIncreaseSize()  throws Exception {
+    void createAndCheckIncreaseSize(TestInfo testInfo)  throws Exception {
         log.info("Start test method "
-                +  getClass().getEnclosingMethod().getName()
+                +  testInfo.getDisplayName()
                 + "inquiryService.SIZE = " + inquiryService.findAll().size()
                 + "sourceService.SIZE  = " + sourceService.findAll().size());
         //given
@@ -155,9 +156,9 @@ class InquiryControllerTest {
     }
 
     @Test
-    void updateAndCheckChangedBody()  throws Exception {
+    void updateAndCheckChangedBody(TestInfo testInfo)  throws Exception {
         log.info("Start test method "
-                +  getClass().getEnclosingMethod().getName()
+                +  testInfo.getDisplayName()
                 + "inquiryService.SIZE = " + inquiryService.findAll().size()
                 + "sourceService.SIZE  = " + sourceService.findAll().size());
         //given
