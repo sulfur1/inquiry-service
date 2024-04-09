@@ -12,6 +12,7 @@ import com.iprody08.inquiryservice.service.InquiryService;
 import com.iprody08.inquiryservice.service.SourceService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.TestInfo;
@@ -55,7 +56,7 @@ class InquiryControllerTest {
     private SourceMapper sourceMapper;
 
     @BeforeEach
-    void setUpEntity() {
+    void setUpEntity(TestInfo testInfo) {
         // given
         log.info("start method setUpEntity");
         SourceDto sourceDto = new SourceDto();
@@ -69,7 +70,11 @@ class InquiryControllerTest {
         List<InquiryDto> inquiryDtoList = List.of(one, two);
 
         inquiryDtoList.forEach(dto -> inquiryService.save(dto));
-        log.info(inquiryDtoList.size() + " :size; end method setUpEntity");
+        log.info("End test method "
+                +  testInfo.getDisplayName()
+                + " inquiryService.SIZE = " + inquiryService.findAll().size()
+                + " sourceService.SIZE  = " + sourceService.findAll().size());
+        // when
 
     }
 
@@ -80,11 +85,12 @@ class InquiryControllerTest {
     }*/
 
     @Test
+    @Order(1)
     void FindByIdAndCompareResults(TestInfo testInfo) throws Exception {
         log.info("Start test method "
                 +  testInfo.getDisplayName()
-                + "inquiryService.SIZE = " + inquiryService.findAll().size()
-                + "sourceService.SIZE  = " + sourceService.findAll().size());
+                + " inquiryService.SIZE = " + inquiryService.findAll().size()
+                + " sourceService.SIZE  = " + sourceService.findAll().size());
         // when
         List<InquiryDto> inquiryDtoList = inquiryService.findAll(0, 10, "id", "asc", null);
         assertFalse(inquiryDtoList.isEmpty(), "The list of inquiries is empty.");
@@ -100,6 +106,7 @@ class InquiryControllerTest {
     }
 
     @Test
+    @Order(2)
     void FindAllAndCheckSize(TestInfo testInfo) throws Exception {
         log.info("Start test method "
                 +  testInfo.getDisplayName()
@@ -115,11 +122,12 @@ class InquiryControllerTest {
     }
 
     @Test
+    @Order(3)
     void deleteAndCheckDecreaseSize(TestInfo testInfo) throws Exception {
         log.info("Start test method "
                 +  testInfo.getDisplayName()
-                + "inquiryService.SIZE = " + inquiryService.findAll().size()
-                + "sourceService.SIZE  = " + sourceService.findAll().size());
+                + " inquiryService.SIZE = " + inquiryService.findAll().size()
+                + " sourceService.SIZE  = " + sourceService.findAll().size());
         //when
         mockMvc.perform(delete("/api/v1/inquiries/id/{id}", 1L))
         //then
@@ -131,11 +139,12 @@ class InquiryControllerTest {
     }
 
     @Test
+    @Order(4)
     void createAndCheckIncreaseSize(TestInfo testInfo)  throws Exception {
         log.info("Start test method "
                 +  testInfo.getDisplayName()
-                + "inquiryService.SIZE = " + inquiryService.findAll().size()
-                + "sourceService.SIZE  = " + sourceService.findAll().size());
+                + " inquiryService.SIZE = " + inquiryService.findAll().size()
+                + " sourceService.SIZE  = " + sourceService.findAll().size());
         //given
         List<InquiryDto> inquiryDtos = inquiryService.findAll();
 
@@ -156,11 +165,12 @@ class InquiryControllerTest {
     }
 
     @Test
+    @Order(5)
     void updateAndCheckChangedBody(TestInfo testInfo)  throws Exception {
         log.info("Start test method "
                 +  testInfo.getDisplayName()
-                + "inquiryService.SIZE = " + inquiryService.findAll().size()
-                + "sourceService.SIZE  = " + sourceService.findAll().size());
+                + " inquiryService.SIZE = " + inquiryService.findAll().size()
+                + " sourceService.SIZE  = " + sourceService.findAll().size());
         //given
         InquiryDto inquiryDto = inquiryService.findAll().get(0);
         inquiryDto.setStatus(InquiryStatus.PAID);
