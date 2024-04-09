@@ -80,6 +80,9 @@ class InquiryControllerTest {
 
     @Test
     void FindByIdAndCompareResults() throws Exception {
+        log.info("Start test method " +  getClass().getEnclosingMethod().getName() +
+                "inquiryService.SIZE = " + inquiryService.findAll().size() +
+                 "sourceService.SIZE + " + sourceService.findAll().size());
         // when
         List<InquiryDto> inquiryDtoList = inquiryService.findAll(0, 10, "id", "asc", null);
         assertFalse(inquiryDtoList.isEmpty(), "The list of inquiries is empty.");
@@ -96,6 +99,9 @@ class InquiryControllerTest {
 
     @Test
     void FindAllAndCheckSize() throws Exception {
+        log.info("Start test method " +  getClass().getEnclosingMethod().getName() +
+                "inquiryService.SIZE = " + inquiryService.findAll().size() +
+                "sourceService.SIZE + " + sourceService.findAll().size());
         // when
         mockMvc.perform(get("/api/v1/inquiries")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -107,6 +113,9 @@ class InquiryControllerTest {
 
     @Test
     void deleteAndCheckDecreaseSize() throws Exception {
+        log.info("Start test method " +  getClass().getEnclosingMethod().getName() +
+                "inquiryService.SIZE = " + inquiryService.findAll().size() +
+                "sourceService.SIZE + " + sourceService.findAll().size());
         //when
         mockMvc.perform(delete("/api/v1/inquiries/id/{id}", 1L))
         //then
@@ -119,6 +128,9 @@ class InquiryControllerTest {
 
     @Test
     void createAndCheckIncreaseSize()  throws Exception {
+        log.info("Start test method " +  getClass().getEnclosingMethod().getName() +
+                "inquiryService.SIZE = " + inquiryService.findAll().size() +
+                "sourceService.SIZE + " + sourceService.findAll().size());
         //given
         List<InquiryDto> inquiryDtos = inquiryService.findAll();
 
@@ -140,6 +152,9 @@ class InquiryControllerTest {
 
     @Test
     void updateAndCheckChangedBody()  throws Exception {
+        log.info("Start test method " +  getClass().getEnclosingMethod().getName() +
+                "inquiryService.SIZE = " + inquiryService.findAll().size() +
+                "sourceService.SIZE + " + sourceService.findAll().size());
         //given
         InquiryDto inquiryDto = inquiryService.findAll().get(0);
         inquiryDto.setStatus(InquiryStatus.PAID);
