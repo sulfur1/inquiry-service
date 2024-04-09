@@ -73,7 +73,9 @@ class InquiryControllerTest {
         log.info("End test method "
                 + " setUpEntity "
                 + " inquiryService.SIZE = " + inquiryService.findAll().size()
-                + " sourceService.SIZE  = " + sourceService.findAll().size());
+                + " sourceService.SIZE  = " + sourceService.findAll().size()
+                + "inquiry id1 = " + inquiryService.findAll().get(0).getId()
+                + "inquiry id2 = " + inquiryService.findAll().get(1).getId());
         // when
 
     }
