@@ -10,7 +10,6 @@ import com.iprody08.inquiryservice.dto.mapper.SourceMapper;
 import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
 import com.iprody08.inquiryservice.service.InquiryService;
 import com.iprody08.inquiryservice.service.SourceService;
-import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
@@ -39,7 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 @Log4j2
-@Transactional
 class InquiryControllerTest {
 
     @Autowired
@@ -58,7 +56,7 @@ class InquiryControllerTest {
     private SourceMapper sourceMapper;
 
     @BeforeEach
-    void setUpEntity(TestInfo testInfo) {
+    void setUpEntity() {
         // given
         log.info("start method setUpEntity");
         SourceDto sourceDto = new SourceDto();
@@ -73,7 +71,7 @@ class InquiryControllerTest {
 
         inquiryDtoList.forEach(dto -> inquiryService.save(dto));
         log.info("End test method "
-                +  testInfo.getDisplayName()
+                + " setUpEntity "
                 + " inquiryService.SIZE = " + inquiryService.findAll().size()
                 + " sourceService.SIZE  = " + sourceService.findAll().size());
         // when
