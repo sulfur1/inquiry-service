@@ -10,9 +10,11 @@ import com.iprody08.inquiryservice.dto.mapper.SourceMapper;
 import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
 import com.iprody08.inquiryservice.service.InquiryService;
 import com.iprody08.inquiryservice.service.SourceService;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -32,6 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
+@Log4j2
 class InquiryControllerTest {
 
     @Autowired
@@ -57,20 +62,19 @@ class InquiryControllerTest {
         sourceService.save(sourceDto);
         List<Source> sourceDto1 = sourceRepository.findAll();
         SourceDto sourceDto2 = sourceMapper.sourceToSourceDto(sourceDto1.get(0));
-        InquiryDto one = new InquiryDto( sourceDto2, "YESSSSS", InquiryStatus.NEW, "note");
-        InquiryDto two = new InquiryDto( sourceDto2, "comment2", InquiryStatus.REJECTED, "note");
+         InquiryDto one = new InquiryDto(sourceDto2, "YESSSSS", InquiryStatus.NEW, "note");
+        InquiryDto two = new InquiryDto(sourceDto2, "comment2", InquiryStatus.REJECTED, "note");
 
         List<InquiryDto> inquiryDtoList = List.of(one, two);
-
-        inquiryDtoList.forEach(dto->inquiryService.save(dto));
-
+        inquiryDtoList.forEach(dto -> inquiryService.save(dto));
     }
 
     @Test
-    @DirtiesContext
-    void FindByIdAndCompareResults() throws Exception {
+    void FindByIdAndCompareResults(TestInfo testInfo) throws Exception {
         // when
-        InquiryDto inquiryDto = inquiryService.findAll().get(0);
+        List<InquiryDto> inquiryDtoList = inquiryService.findAll(0, 10, "id", "asc", null);
+        assertFalse(inquiryDtoList.isEmpty(), "The list of inquiries is empty.");
+        InquiryDto inquiryDto = inquiryDtoList.get(0);
         mockMvc.perform(get("/api/v1/inquiries/id/{id}", inquiryDto.getId())
                         .contentType(MediaType.APPLICATION_JSON))
         //then
@@ -82,8 +86,7 @@ class InquiryControllerTest {
     }
 
     @Test
-    @DirtiesContext
-    void FindAllAndCheckSize() throws Exception {
+    void FindAllAndCheckSize(TestInfo testInfo) throws Exception {
         // when
         mockMvc.perform(get("/api/v1/inquiries")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -94,8 +97,7 @@ class InquiryControllerTest {
     }
 
     @Test
-    @DirtiesContext
-    void deleteAndCheckDecreaseSize() throws Exception {
+    void deleteAndCheckDecreaseSize(TestInfo testInfo) throws Exception {
         //when
         mockMvc.perform(delete("/api/v1/inquiries/id/{id}", 1L))
         //then
@@ -107,13 +109,13 @@ class InquiryControllerTest {
     }
 
     @Test
-    @DirtiesContext
-    void createAndCheckIncreaseSize()  throws Exception {
+    void createAndCheckIncreaseSize(TestInfo testInfo)  throws Exception {
         //given
         List<InquiryDto> inquiryDtos = inquiryService.findAll();
+
         assertEquals(2, inquiryDtos.size());
         SourceDto sourceDto = inquiryDtos.get(0).getSourceId();
-        InquiryDto newInquiryDto = new InquiryDto( sourceDto, "newInquiryDto", InquiryStatus.PAYMENT, "newInquiryDto");
+        InquiryDto newInquiryDto = new InquiryDto(sourceDto, "newInquiryDto", InquiryStatus.PAYMENT, "newInquiryDto");
         //when
         mockMvc.perform(post("/api/v1/inquiries")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -128,8 +130,7 @@ class InquiryControllerTest {
     }
 
     @Test
-    @DirtiesContext
-    void updateAndCheckChangedBody()  throws Exception {
+    void updateAndCheckChangedBody(TestInfo testInfo)  throws Exception {
         //given
         InquiryDto inquiryDto = inquiryService.findAll().get(0);
         inquiryDto.setStatus(InquiryStatus.PAID);
