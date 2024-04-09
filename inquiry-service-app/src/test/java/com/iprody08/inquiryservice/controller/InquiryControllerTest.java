@@ -10,7 +10,7 @@ import com.iprody08.inquiryservice.dto.mapper.SourceMapper;
 import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
 import com.iprody08.inquiryservice.service.InquiryService;
 import com.iprody08.inquiryservice.service.SourceService;
-import org.junit.jupiter.api.AfterEach;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,11 +19,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -32,6 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
+@Log4j2
 class InquiryControllerTest {
 
     @Autowired
@@ -52,6 +56,7 @@ class InquiryControllerTest {
     @BeforeEach
     void setUpEntity() {
         // given
+        log.info("start method setUpEntity");
         SourceDto sourceDto = new SourceDto();
         sourceDto.setName("Test name");
         sourceService.save(sourceDto);
@@ -63,13 +68,15 @@ class InquiryControllerTest {
         List<InquiryDto> inquiryDtoList = List.of(one, two);
 
         inquiryDtoList.forEach(dto -> inquiryService.save(dto));
+        log.info(inquiryDtoList.size() + " :size; end method setUpEntity");
+
     }
 
-    @AfterEach
+/*    @AfterEach
     void clearRepository() {
        inquiryService.deleteAll();
        sourceService.deleteAll();
-    }
+    }*/
 
     @Test
     void FindByIdAndCompareResults() throws Exception {

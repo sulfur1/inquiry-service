@@ -3,16 +3,17 @@ package com.iprody08.inquiryservice.controller;
 import com.iprody08.inquiryservice.dto.SourceDto;
 
 import com.iprody08.inquiryservice.service.SourceService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 class SourceControllerTest {
 
     @Autowired
@@ -38,11 +40,11 @@ class SourceControllerTest {
         sourceDto2.setName("Test2 name");
         sourceService.save(sourceDto2);
     }
-
+/*
     @AfterEach
     void clearRepository() {
         sourceService.deleteAll();
-    }
+    }*/
 
     @Test
     void FindAllAndCheckSize() throws Exception {
