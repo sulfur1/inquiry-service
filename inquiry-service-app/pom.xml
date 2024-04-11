@@ -15,6 +15,7 @@
 
 	<properties>
 		<checkstyle.dir>${basedir}/../checkstyle</checkstyle.dir>
+		<springdoc.version>2.1.0</springdoc.version>
 	</properties>
 
 	<dependencies>
@@ -43,6 +44,12 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
+		</dependency>
+		<!--Open API Swagger-->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${springdoc.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
