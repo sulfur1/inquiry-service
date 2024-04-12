@@ -2,37 +2,35 @@
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <mirrors>
+        <mirror>
+            <id>insecure-repo</id>
+            <mirrorOf>external:http:*</mirrorOf>
+            <url>http://80.78.243.49:8085/iprody/</url>
+            <blocked>false</blocked>
+        </mirror>
+    </mirrors>
+
     <activeProfiles>
-        <activeProfile>github</activeProfile>
+        <activeProfile>artipie</activeProfile>
     </activeProfiles>
+
     <profiles>
         <profile>
-            <id>github</id>
+            <id>artipie</id>
             <repositories>
                 <repository>
                     <id>central</id>
                     <url>https://repo1.maven.org/maven2</url>
                 </repository>
                 <repository>
-                    <id>github</id>
-                    <url>https://maven.pkg.github.com/iprody/iprody-devs-gr0000000008-product-service</url>
+                    <id>artipie</id>
+                    <url>http://80.78.243.49:8085/iprody/</url>
                     <snapshots>
                         <enabled>true</enabled>
                     </snapshots>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
                 </repository>
             </repositories>
         </profile>
     </profiles>
-
-    <servers>
-        <server>
-            <id>github</id>
-            <username>${env.USER_NAME}</username>
-            <password>${env.ACCESS_TOKEN}</password>
-        </server>
-    </servers>
-
 </settings>
