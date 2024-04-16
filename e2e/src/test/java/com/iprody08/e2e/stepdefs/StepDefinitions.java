@@ -4,7 +4,7 @@ import io.cucumber.java.en.Given;
 
 public class StepDefinitions {
     @Given("cucumber test")
-    public void cucumber_test() {
+    public void cucumberTest() {
         System.out.println("Cucumber works!");
     }
 }
