@@ -17,6 +17,7 @@ on:
 env:
   REGISTRY: ghcr.io
   NAME_IMAGE: iprody/iprody-devs-gr0000000008-inquiry-service
+  JAR_FILE: inquiry-service-0.0.1-SNAPSHOT.jar
 
 jobs:
   push_to_github_registry:
@@ -50,15 +51,17 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./inquiry-service-app
+          file: ./inquiry-service-app/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            JAR_FILE=${{ env.JAR_FILE }}
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: target
-          path: |
-            target
-            !target/**/*.md
+          name: inquiry-service-archive
+          path:
+            ./inquiry-service-app/target
+            !./inquiry-service-app/target/**/*.md
