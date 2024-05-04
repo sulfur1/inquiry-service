@@ -5,6 +5,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,16 +24,27 @@ public class InquiryDto {
 
     private String note;
 
-    private Long productRefId;
-
-    private Long customerRefId;
-
-    private Long managerRefId;
-
     public InquiryDto(SourceDto sourceId, String comment, InquiryStatus status, String note) {
         this.sourceId = sourceId;
         this.comment = comment;
         this.status = status;
         this.note = note;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        InquiryDto inquiryDto = (InquiryDto) o;
+        return Objects.equals(id, inquiryDto.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

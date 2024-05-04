@@ -57,7 +57,7 @@ public class InquiryServiceImpl implements InquiryService {
             inquiryPage = inquiryRepository.findAll(spec, paging);
 
         } else {
-            inquiryPage = inquiryRepository.findAllWithSource(paging);
+            inquiryPage = inquiryRepository.findAll(paging);
         }
 
         return inquiryPage.getContent()
@@ -68,17 +68,19 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
-    public void save(InquiryDto inquiryDto) {
+    public InquiryDto save(InquiryDto inquiryDto) {
         final Inquiry inquiry = inquiryMapper.inquiryDtoToInquiry(inquiryDto);
         inquiry.setStatus(InquiryStatus.NEW);
-        inquiryRepository.save(inquiry);
+        return inquiryMapper.inquiryToInquiryDto(inquiryRepository.save(inquiry));
+
     }
 
     @Override
     public Optional<InquiryDto> findById(long id) {
-        return inquiryRepository.findByIdWithSource(id).map(inquiryMapper::inquiryToInquiryDto);
+        return inquiryRepository.findById(id).map(inquiryMapper::inquiryToInquiryDto);
 
     }
+
 
     @Override
     public void deleteById(long id) {
@@ -100,4 +102,3 @@ public class InquiryServiceImpl implements InquiryService {
                 });
     }
 }
-
