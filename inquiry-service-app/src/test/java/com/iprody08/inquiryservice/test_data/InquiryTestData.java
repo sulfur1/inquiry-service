@@ -1,7 +1,7 @@
 package com.iprody08.inquiryservice.test_data;
 
 import com.iprody08.inquiryservice.dto.InquiryDto;
-import com.iprody08.inquiryservice.dto.mapper.InquiryMapper;
+import com.iprody08.inquiryservice.mapper.InquiryMapper;
 import com.iprody08.inquiryservice.entity.Inquiry;
 import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
 import org.mapstruct.factory.Mappers;

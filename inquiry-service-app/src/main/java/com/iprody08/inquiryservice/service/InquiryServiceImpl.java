@@ -3,12 +3,13 @@ package com.iprody08.inquiryservice.service;
 import com.iprody08.inquiryservice.dao.InquiryRepository;
 import com.iprody08.inquiryservice.dao.InquirySpecifications;
 import com.iprody08.inquiryservice.dto.InquiryDto;
-import com.iprody08.inquiryservice.dto.mapper.InquiryMapper;
 import com.iprody08.inquiryservice.entity.Inquiry;
 import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
 import com.iprody08.inquiryservice.filter.InquiryFilter;
+import com.iprody08.inquiryservice.mapper.InquiryMapper;
 import com.iprody08.inquiryservice.pagination.PaginationUtils;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class InquiryServiceImpl implements InquiryService {
         this.inquiryRepository = inquiryRepository;
         this.inquiryMapper = inquiryMapper;
     }
+
     @Override
     public List<InquiryDto> findAll() {
         return inquiryRepository.findAll()
@@ -97,7 +99,7 @@ public class InquiryServiceImpl implements InquiryService {
         return inquiryRepository.findById(inquiryDto.getId())
                 .map(inquiry -> {
                     inquiryMapper.updateInquiryFromDto(inquiryDto, inquiry);
-                    inquiry.setStatus(inquiryDto.getStatus());
+                    inquiry.setStatus(InquiryStatus.valueOf(inquiryDto.getStatus()));
                     return inquiryMapper.inquiryToInquiryDto(inquiryRepository.save(inquiry));
                 });
     }

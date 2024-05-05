@@ -1,4 +1,4 @@
-package com.iprody08.inquiryservice.dto.mapper;
+package com.iprody08.inquiryservice.mapper;
 
 import com.iprody08.inquiryservice.dto.SourceDto;
 import com.iprody08.inquiryservice.entity.Source;
