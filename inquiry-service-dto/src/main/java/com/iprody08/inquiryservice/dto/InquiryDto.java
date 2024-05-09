@@ -1,9 +1,9 @@
 package com.iprody08.inquiryservice.dto;
 
-import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Objects;
 
@@ -19,12 +19,11 @@ public class InquiryDto {
 
     private String comment;
 
-    @Enumerated(EnumType.STRING)
-    private InquiryStatus status;
+    private String status;
 
     private String note;
 
-    public InquiryDto(SourceDto sourceId, String comment, InquiryStatus status, String note) {
+    public InquiryDto(SourceDto sourceId, String comment, String status, String note) {
         this.sourceId = sourceId;
         this.comment = comment;
         this.status = status;

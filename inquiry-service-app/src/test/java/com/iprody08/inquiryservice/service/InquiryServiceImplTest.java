@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 
 import com.iprody08.inquiryservice.dao.InquiryRepository;
 import com.iprody08.inquiryservice.dto.InquiryDto;
-import com.iprody08.inquiryservice.dto.mapper.InquiryMapper;
+import com.iprody08.inquiryservice.mapper.InquiryMapper;
 import com.iprody08.inquiryservice.entity.Inquiry;
 
 import com.iprody08.inquiryservice.entity.enums.InquiryStatus;
@@ -48,7 +48,7 @@ class InquiryServiceImplTest {
         assertThat(result.get()).usingRecursiveComparison().isEqualTo(inquiryMapper.inquiryToInquiryDto(INQUIRY_1));
         assertEquals(result.get().getId(), INQUIRY_1.getId());
         assertEquals(result.get().getComment(), INQUIRY_1.getComment());
-        assertEquals(result.get().getStatus(), INQUIRY_1.getStatus());
+        assertEquals(result.get().getStatus(), INQUIRY_1.getStatus().name());
 
     }
 
@@ -80,7 +80,7 @@ class InquiryServiceImplTest {
         for (int i = 0; i < expected.size(); i++) {
             assertThat(expected.get(i).getId()).isEqualTo(getInquiries().get(i).getId());
             assertThat(expected.get(i).getComment()).isEqualTo(getInquiries().get(i).getComment());
-            assertThat(expected.get(i).getStatus()).isEqualTo(getInquiries().get(i).getStatus());
+            assertThat(expected.get(i).getStatus()).isEqualTo(getInquiries().get(i).getStatus().name());
             assertThat(expected.get(i).getNote()).isEqualTo(getInquiries().get(i).getNote());
         }
     }
@@ -117,7 +117,7 @@ class InquiryServiceImplTest {
         when(inquiryRepository.save(any(Inquiry.class))).thenReturn(inquiry);
 
         //when
-        InquiryStatus newStatus = inquiryService.save(inquiryDto).getStatus();
+        InquiryStatus newStatus = InquiryStatus.valueOf(inquiryService.save(inquiryDto).getStatus());
 
         //then
         assertNotEquals(oldStatus.toString(), newStatus.toString());

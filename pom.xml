@@ -116,6 +116,7 @@
 	<modules>
 		<module>inquiry-service-app</module>
 		<module>e2e</module>
-	</modules>
+        <module>inquiry-service-dto</module>
+    </modules>
 
 </project>
