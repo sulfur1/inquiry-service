@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Run test with Maven
-        run: mvn -P github --settings ./.github/workflows/maven-settings.xml -B test
+        run: mvn -P artipie --settings ./.github/workflows/maven-settings.xml -B test
         env:
           USER_NAME: ${{ github.actor }}
           ACCESS_TOKEN: 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

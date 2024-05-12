@@ -78,6 +78,22 @@
 			<artifactId>inquiry-service-dto</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.iprodi08</groupId>
+			<artifactId>product-service-dto</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.iprody08</groupId>
+			<artifactId>customer-service-dto</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!--Telegram Api-->
+		<dependency>
+			<groupId>com.github.pengrad</groupId>
+			<artifactId>java-telegram-bot-api</artifactId>
+			<version>7.2.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
