@@ -33,7 +33,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build project with Maven
-        run: mvn -B install -Dmaven.test.skip=true -Dcheckstyle.skip --file pom.xml
+        run: |
+          mvn -P artipie \
+          --settings ./.github/workflows/maven-settings.xml -B install \
+          -Dmaven.test.skip=true \
+          -Dcheckstyle.skip --file pom.xml
       - name: Log in to the Container registry
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
