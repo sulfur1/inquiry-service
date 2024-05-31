@@ -35,6 +35,17 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>artipie</id>
+			<url>http://80.78.243.49:8085/iprody/</url>
+		</snapshotRepository>
+		<repository>
+			<id>artipie</id>
+			<url>http://80.78.243.49:8085/iprody/</url>
+		</repository>
+	</distributionManagement>
+
 	<build>
 		<pluginManagement>
 			<plugins>
