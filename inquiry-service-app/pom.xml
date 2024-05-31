@@ -19,6 +19,23 @@
 	</properties>
 
 	<dependencies>
+		<!-- Gson-Fire Dependency -->
+		<dependency>
+			<groupId>io.gsonfire</groupId>
+			<artifactId>gson-fire</artifactId>
+			<version>1.8.5</version>
+		</dependency>
+		<!-- Jackson Nullable Dependency -->
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>0.2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
 		<dependency>
 		<groupId>io.micrometer</groupId>
 		<artifactId>micrometer-tracing-bridge-brave</artifactId>
@@ -107,6 +124,68 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>7.6.0</version>
+				<executions>
+					<execution>
+						<id>generate-product-service-client</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/product_api.yml</inputSpec>
+							<output>${project.build.directory}/generated-sources/product-service</output>
+							<generatorName>java</generatorName>
+							<apiPackage>com.iprody08.inquiryservice.product.api</apiPackage>
+							<modelPackage>com.iprody08.inquiryservice.product.model</modelPackage>
+							<invokerPackage>com.iprody08.inquiryservice.product.invoker</invokerPackage>
+							<configOptions>
+								<dateLibrary>resttemplate</dateLibrary>
+							</configOptions>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-customer-service-client</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/customer_api.yml</inputSpec>
+							<generatorName>java</generatorName>
+							<output>${project.build.directory}/generated-sources/customer-service</output>
+							<apiPackage>com.iprody08.inquiryservice.customer.api</apiPackage>
+							<modelPackage>com.iprody08.inquiryservice.customer.model</modelPackage>
+							<invokerPackage>com.iprody08.inquiryservice.customer.invoker</invokerPackage>
+							<configOptions>
+								<library>resttemplate</library>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<configuration>
+							<tasks>
+								<replace dir="${project.build.directory}/generated-sources">
+									<include name="**/*.java" />
+									<replacefilter token="javax.annotation" value="jakarta.annotation" />
+								</replace>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
 			</plugin>
@@ -124,4 +203,5 @@
 			</plugin>
 		</plugins>
 	</build>
+
 </project>
