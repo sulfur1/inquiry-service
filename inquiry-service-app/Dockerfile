@@ -1,5 +1,4 @@
-FROM openjdk:21-slim
-
+FROM dream2bcoder/openjre21
 WORKDIR /apps
 ARG JAR_FILE
 COPY target/${JAR_FILE} /apps/app.jar
@@ -11,4 +10,4 @@ RUN chown -R servuser /apps
 
 USER servuser
 EXPOSE 8080 8443
-CMD ["/apps/entrypoint.sh"]
+ENTRYPOINT ["java", "-jar", "/apps/app.jar"]
